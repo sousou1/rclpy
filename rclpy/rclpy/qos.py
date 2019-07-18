@@ -336,7 +336,7 @@ QoSLivelinessPolicy = LivelinessPolicy
 
 class DeprecatedQoSProfile(QoSProfile):
 
-    def __init__(self, qos_profile: QoSProfile, profile_name: str):
+    def __init__(self, qos_profile: QoSProfile, profile_name):
         super().__init__(
             history=qos_profile.history,
             depth=qos_profile.depth,

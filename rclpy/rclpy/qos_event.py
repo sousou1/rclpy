@@ -161,7 +161,7 @@ class SubscriptionEventCallbacks:
         *,
         deadline: Optional[Callable[[QoSRequestedDeadlineMissedInfo], None]] = None,
         liveliness: Optional[Callable[[QoSLivelinessChangedInfo], None]] = None,
-    ) -> None:
+    ):
         """
         Constructor.
 
@@ -175,7 +175,7 @@ class SubscriptionEventCallbacks:
 
     def create_event_handlers(
         self, callback_group: CallbackGroup, subscription_handle: Handle,
-    ) -> List[QoSEventHandler]:
+    ):
         event_handlers = []
         if self.deadline:
             event_handlers.append(QoSEventHandler(
@@ -200,7 +200,7 @@ class PublisherEventCallbacks:
         *,
         deadline: Optional[Callable[[QoSOfferedDeadlineMissedInfo], None]] = None,
         liveliness: Optional[Callable[[QoSLivelinessLostInfo], None]] = None
-    ) -> None:
+    ):
         """
         Constructor.
 
@@ -214,7 +214,7 @@ class PublisherEventCallbacks:
 
     def create_event_handlers(
         self, callback_group: CallbackGroup, publisher_handle: Handle,
-    ) -> List[QoSEventHandler]:
+    ):
         event_handlers = []
         if self.deadline:
             event_handlers.append(QoSEventHandler(

@@ -106,7 +106,7 @@ class _WorkTracker:
         return True
 
 
-async def await_or_execute(callback: Union[Callable, Coroutine], *args) -> Any:
+async def await_or_execute(callback: Union[Callable, Coroutine], *args):
     """Await a callback if it is a coroutine, else execute it."""
     if inspect.iscoroutinefunction(callback):
         # Await a coroutine
@@ -142,10 +142,10 @@ class Executor:
     :param context: The context to be associated with, or ``None`` for the default global context.
     """
 
-    def __init__(self, *, context: Context = None) -> None:
+    def __init__(self, *, context = None):
         super().__init__()
         self._context = get_default_context() if context is None else context
-        self._nodes: Set[Node] = set()
+        self._nodes = set()
         self._nodes_lock = RLock()
         # Tasks to be executed (oldest first) 3-tuple Task, Entity, Node
         self._tasks: List[Tuple[Task, Optional[WaitableEntityType], Optional[Node]]] = []
@@ -165,11 +165,11 @@ class Executor:
         self._sigint_gc = SignalHandlerGuardCondition(context)
 
     @property
-    def context(self) -> Context:
+    def context(self):
         """Get the context associated with the executor."""
         return self._context
 
-    def create_task(self, callback: Union[Callable, Coroutine], *args, **kwargs) -> Task:
+    def create_task(self, callback: Union[Callable, Coroutine], *args, **kwargs):
         """
         Add a callback or coroutine to be executed during :meth:`spin` and return a Future.
 
@@ -184,7 +184,7 @@ class Executor:
         # Task inherits from Future
         return task
 
-    def shutdown(self, timeout_sec: float = None) -> bool:
+    def shutdown(self, timeout_sec = None):
         """
         Stop executing callbacks and wait for their completion.
 
@@ -222,7 +222,7 @@ class Executor:
         if self._sigint_gc is not None:
             self._sigint_gc.destroy()
 
-    def add_node(self, node: 'Node') -> bool:
+    def add_node(self, node: 'Node'):
         """
         Add a node whose callbacks should be managed by this executor.
 
@@ -238,7 +238,7 @@ class Executor:
                 return True
             return False
 
-    def remove_node(self, node: 'Node') -> None:
+    def remove_node(self, node: 'Node'):
         """
         Stop managing this node's callbacks.
 
@@ -253,7 +253,7 @@ class Executor:
                 # Rebuild the wait set so it doesn't include this node
                 self._guard.trigger()
 
-    def wake(self) -> None:
+    def wake(self):
         """
         Wake the executor because something changed.
 
@@ -262,17 +262,17 @@ class Executor:
         if self._guard:
             self._guard.trigger()
 
-    def get_nodes(self) -> List['Node']:
+    def get_nodes(self):
         """Return nodes that have been added to this executor."""
         with self._nodes_lock:
             return list(self._nodes)
 
-    def spin(self) -> None:
+    def spin(self):
         """Execute callbacks until shutdown."""
         while self._context.ok():
             self.spin_once()
 
-    def spin_until_future_complete(self, future: Future, timeout_sec: float = None) -> None:
+    def spin_until_future_complete(self, future: Future, timeout_sec = None):
         """Execute callbacks until a given future is done or a timeout occurs."""
         if timeout_sec is None or timeout_sec < 0:
             while self._context.ok() and not future.done():
@@ -291,7 +291,7 @@ class Executor:
 
                 timeout_left = end - now
 
-    def spin_once(self, timeout_sec: float = None) -> None:
+    def spin_once(self, timeout_sec = None):
         """
         Wait for and execute a single callback.
 
@@ -364,7 +364,7 @@ class Executor:
         node: 'Node',
         take_from_wait_list: Callable,
         call_coroutine: Coroutine
-    ) -> Task:
+    ):
         """
         Make a handler that performs work on an entity.
 
@@ -403,7 +403,7 @@ class Executor:
             self._tasks.append((task, entity, node))
         return task
 
-    def can_execute(self, entity: WaitableEntityType) -> bool:
+    def can_execute(self, entity: WaitableEntityType):
         """
         Determine if a callback for an entity can be executed.
 
@@ -414,9 +414,9 @@ class Executor:
 
     def _wait_for_ready_callbacks(
         self,
-        timeout_sec: float = None,
+        timeout_sec = None,
         nodes: List['Node'] = None
-    ) -> Generator[Tuple[Task, WaitableEntityType, 'Node'], None, None]:
+    ):
         """
         Yield callbacks that are ready to be executed.
 
@@ -454,12 +454,12 @@ class Executor:
                     self._tasks = list(filter(lambda t_e_n: not t_e_n[0].done(), self._tasks))
 
             # Gather entities that can be waited on
-            subscriptions: List[Subscription] = []
-            guards: List[GuardCondition] = []
-            timers: List[WallTimer] = []
-            clients: List[Client] = []
-            services: List[Service] = []
-            waitables: List[Waitable] = []
+            subscriptions = []
+            guards = []
+            timers = []
+            clients = []
+            services = []
+            waitables = []
             for node in nodes_to_use:
                 subscriptions.extend(filter(self.can_execute, node.subscriptions))
                 timers.extend(filter(self.can_execute, node.timers))
@@ -625,7 +625,7 @@ class Executor:
             ):
                 raise TimeoutException()
 
-    def wait_for_ready_callbacks(self, *args, **kwargs) -> Tuple[Task, WaitableEntityType, 'Node']:
+    def wait_for_ready_callbacks(self, *args, **kwargs):
         """
         Return callbacks that are ready to be executed.
 
@@ -655,10 +655,10 @@ class Executor:
 class SingleThreadedExecutor(Executor):
     """Runs callbacks in the thread that calls :meth:`Executor.spin`."""
 
-    def __init__(self, *, context: Context = None) -> None:
+    def __init__(self, *, context = None):
         super().__init__(context=context)
 
-    def spin_once(self, timeout_sec: float = None) -> None:
+    def spin_once(self, timeout_sec = None):
         try:
             handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
         except ShutdownException:
@@ -681,7 +681,7 @@ class MultiThreadedExecutor(Executor):
     :param context: The context associated with the executor.
     """
 
-    def __init__(self, num_threads: int = None, *, context: Context = None) -> None:
+    def __init__(self, num_threads = None, *, context = None):
         super().__init__(context=context)
         if num_threads is None:
             try:
@@ -690,7 +690,7 @@ class MultiThreadedExecutor(Executor):
                 num_threads = 1
         self._executor = ThreadPoolExecutor(num_threads)
 
-    def spin_once(self, timeout_sec: float = None) -> None:
+    def spin_once(self, timeout_sec = None):
         try:
             handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
         except ShutdownException:

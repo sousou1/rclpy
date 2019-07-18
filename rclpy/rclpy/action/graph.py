@@ -21,9 +21,9 @@ from rclpy.node import Node
 
 def get_action_client_names_and_types_by_node(
     node: Node,
-    remote_node_name: str,
-    remote_node_namespace: str
-) -> List[Tuple[str, List[str]]]:
+    remote_node_name,
+    remote_node_namespace
+):
     """
     Get a list of action names and types for action clients associated with a node.
 
@@ -41,9 +41,9 @@ def get_action_client_names_and_types_by_node(
 
 def get_action_server_names_and_types_by_node(
     node: Node,
-    remote_node_name: str,
-    remote_node_namespace: str
-) -> List[Tuple[str, List[str]]]:
+    remote_node_name,
+    remote_node_namespace
+):
     """
     Get a list of action names and types for action servers associated with a node.
 
@@ -59,7 +59,7 @@ def get_action_server_names_and_types_by_node(
             node_capsule, remote_node_name, remote_node_namespace)
 
 
-def get_action_names_and_types(node: Node) -> List[Tuple[str, List[str]]]:
+def get_action_names_and_types(node: Node):
     """
     Get a list of action names and types.
 

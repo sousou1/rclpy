@@ -59,7 +59,7 @@ if TYPE_CHECKING:
     from rclpy.node import Node  # noqa: F401
 
 
-def init(*, args: List[str] = None, context: Context = None) -> None:
+def init(*, args = None, context = None):
     """
     Initialize ROS communications for a given context.
 
@@ -78,7 +78,7 @@ def init(*, args: List[str] = None, context: Context = None) -> None:
 __executor = None
 
 
-def get_global_executor() -> 'Executor':
+def get_global_executor():
     global __executor
     if __executor is None:
         # imported locally to avoid loading extensions on module import
@@ -87,7 +87,7 @@ def get_global_executor() -> 'Executor':
     return __executor
 
 
-def shutdown(*, context: Context = None) -> None:
+def shutdown(*, context = None):
     """
     Shutdown a previously initialized context.
 
@@ -104,17 +104,17 @@ def shutdown(*, context: Context = None) -> None:
 
 
 def create_node(
-    node_name: str,
+    node_name,
     *,
-    context: Context = None,
-    cli_args: List[str] = None,
-    namespace: str = None,
-    use_global_arguments: bool = True,
-    start_parameter_services: bool = True,
-    parameter_overrides: List[Parameter] = None,
-    allow_undeclared_parameters: bool = False,
-    automatically_declare_parameters_from_overrides: bool = False
-) -> 'Node':
+    context = None,
+    cli_args = None,
+    namespace = None,
+    use_global_arguments = True,
+    start_parameter_services = True,
+    parameter_overrides = None,
+    allow_undeclared_parameters = False,
+    automatically_declare_parameters_from_overrides = False
+):
     """
     Create an instance of :class:`.Node`.
 
@@ -148,7 +148,7 @@ def create_node(
         ))
 
 
-def spin_once(node: 'Node', *, executor: 'Executor' = None, timeout_sec: float = None) -> None:
+def spin_once(node: 'Node', *, executor: 'Executor' = None, timeout_sec = None):
     """
     Execute one item of work or wait until a timeout expires.
 
@@ -171,7 +171,7 @@ def spin_once(node: 'Node', *, executor: 'Executor' = None, timeout_sec: float =
         executor.remove_node(node)
 
 
-def spin(node: 'Node', executor: 'Executor' = None) -> None:
+def spin(node: 'Node', executor: 'Executor' = None):
     """
     Execute work and block until the context associated with the executor is shutdown.
 
@@ -195,8 +195,8 @@ def spin_until_future_complete(
     node: 'Node',
     future: Future,
     executor: 'Executor' = None,
-    timeout_sec: float = None
-) -> None:
+    timeout_sec = None
+):
     """
     Execute work until the future is complete.
 

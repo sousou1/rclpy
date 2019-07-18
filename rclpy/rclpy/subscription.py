@@ -30,14 +30,14 @@ class Subscription:
     def __init__(
          self,
          subscription_handle: Handle,
-         msg_type: MsgType,
-         topic: str,
+         msg_type,
+         topic,
          callback: Callable,
          callback_group: CallbackGroup,
          qos_profile: QoSProfile,
          raw: bool,
          event_callbacks: SubscriptionEventCallbacks,
-    ) -> None:
+    ):
         """
         Create a container for a ROS subscription.
 
