@@ -29,12 +29,12 @@ class Service:
     def __init__(
         self,
         service_handle,
-        srv_type: SrvType,
-        srv_name: str,
+        srv_type,
+        srv_name,
         callback: Callable[[SrvTypeRequest, SrvTypeResponse], SrvTypeResponse],
-        callback_group: CallbackGroup,
-        qos_profile: QoSProfile
-    ) -> None:
+        callback_group,
+        qos_profile
+    ):
         """
         Create a container for a ROS service server.
 
@@ -58,7 +58,7 @@ class Service:
         self._executor_event = False
         self.qos_profile = qos_profile
 
-    def send_response(self, response: SrvTypeResponse, header) -> None:
+    def send_response(self, response, header):
         """
         Send a service response.
 

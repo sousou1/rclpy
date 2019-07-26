@@ -16,7 +16,7 @@ from rclpy.exceptions import InvalidParameterException
 from rclpy.impl.implementation_singleton import rclpy_implementation as _rclpy
 
 
-def validate_parameter_name(name: str) -> bool:
+def validate_parameter_name(name):
     """
     Validate a given parameter name, and raise an exception if invalid.
 

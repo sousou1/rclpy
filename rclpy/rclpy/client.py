@@ -32,13 +32,13 @@ SrvTypeResponse = TypeVar('SrvTypeResponse')
 class Client:
     def __init__(
         self,
-        context: Context,
+        context,
         client_handle,
-        srv_type: SrvType,
-        srv_name: str,
-        qos_profile: QoSProfile,
-        callback_group: CallbackGroup
-    ) -> None:
+        srv_type,
+        srv_name,
+        qos_profile,
+        callback_group
+    ):
         """
         Create a container for a ROS service client.
 
@@ -59,12 +59,12 @@ class Client:
         self.srv_name = srv_name
         self.qos_profile = qos_profile
         # Key is a sequence number, value is an instance of a Future
-        self._pending_requests: Dict[int, Future] = {}
+        self._pending_requests = {}
         self.callback_group = callback_group
         # True when the callback is ready to fire but has not been "taken" by an executor
         self._executor_event = False
 
-    def call(self, request: SrvTypeRequest) -> SrvTypeResponse:
+    def call(self, request):
         """
         Make a service request and wait for the result.
 
@@ -93,7 +93,7 @@ class Client:
             raise future.exception()
         return future.result()
 
-    def remove_pending_request(self, future: Future) -> None:
+    def remove_pending_request(self, future):
         """
         Remove a future from the list of pending requests.
 
@@ -109,7 +109,7 @@ class Client:
                     pass
                 break
 
-    def call_async(self, request: SrvTypeRequest) -> Future:
+    def call_async(self, request):
         """
         Make a service request and asyncronously get the result.
 
@@ -134,7 +134,7 @@ class Client:
 
         return future
 
-    def service_is_ready(self) -> bool:
+    def service_is_ready(self):
         """
         Check if there is a service server ready.
 
@@ -143,7 +143,7 @@ class Client:
         with self.handle as capsule:
             return _rclpy.rclpy_service_server_is_available(capsule)
 
-    def wait_for_service(self, timeout_sec: float = None) -> bool:
+    def wait_for_service(self, timeout_sec = None):
         """
         Wait for a service server to become ready.
 

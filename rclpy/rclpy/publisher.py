@@ -27,13 +27,13 @@ class Publisher:
 
     def __init__(
         self,
-        publisher_handle: Handle,
-        msg_type: MsgType,
-        topic: str,
-        qos_profile: QoSProfile,
-        event_callbacks: PublisherEventCallbacks,
-        callback_group: CallbackGroup,
-    ) -> None:
+        publisher_handle,
+        msg_type,
+        topic,
+        qos_profile,
+        event_callbacks,
+        callback_group,
+    ):
         """
         Create a container for a ROS publisher.
 
@@ -56,7 +56,7 @@ class Publisher:
         self.event_handlers = event_callbacks.create_event_handlers(
             callback_group, publisher_handle)
 
-    def publish(self, msg: MsgType) -> None:
+    def publish(self, msg):
         """
         Send a message to the topic for the publisher.
 
@@ -76,7 +76,7 @@ class Publisher:
     def destroy(self):
         self.handle.destroy()
 
-    def assert_liveliness(self) -> None:
+    def assert_liveliness(self):
         """
         Manually assert that this Publisher is alive.
 

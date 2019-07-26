@@ -27,11 +27,11 @@ class CallbackGroup:
     :meth:`beginning_execution`, and :meth:`ending_execution`.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
-        self.entities: set = set()
+        self.entities = set()
 
-    def add_entity(self, entity) -> None:
+    def add_entity(self, entity):
         """
         Add an entity to the callback group.
 
@@ -39,7 +39,7 @@ class CallbackGroup:
         """
         self.entities.add(weakref.ref(entity))
 
-    def has_entity(self, entity) -> bool:
+    def has_entity(self, entity):
         """
         Determine if an entity has been added to this group.
 
@@ -47,7 +47,7 @@ class CallbackGroup:
         """
         return weakref.ref(entity) in self.entities
 
-    def can_execute(self, entity) -> bool:
+    def can_execute(self, entity):
         """
         Determine if an entity can be executed.
 
@@ -56,7 +56,7 @@ class CallbackGroup:
         """
         raise NotImplementedError()
 
-    def beginning_execution(self, entity) -> bool:
+    def beginning_execution(self, entity):
         """
         Get permission for the callback from the group to begin executing an entity.
 
@@ -68,7 +68,7 @@ class CallbackGroup:
         """
         raise NotImplementedError()
 
-    def ending_execution(self, entity) -> None:
+    def ending_execution(self, entity):
         """
         Notify group that a callback has finished executing.
 
